@@ -1,11 +1,9 @@
 package net.natelong.qpp;
 
-import java.awt.*;
 import java.io.*;
 import java.security.MessageDigest;
 import java.util.regex.*;
 import java.net.URL;
-import java.util.Timer;
 
 public class App{
 
@@ -14,8 +12,6 @@ public class App{
 	
 	public static void main( String[] args ) throws Throwable{
 		long startTime = System.nanoTime();
-		Pattern includePattern = Pattern.compile( "^#include \"(.+)\"$" );
-		Matcher matcher;
 
 		if( args.length < 2 ){
 			System.out.println( "Not enough arguments" );
@@ -36,16 +32,13 @@ public class App{
 
 	public static void processFile( BufferedReader in, BufferedWriter out, String context ) throws Throwable{
 		String tmpLine = in.readLine();
-		int lineCount = 0;
 		while( tmpLine != null ){
 			Matcher matcher = includePattern.matcher( tmpLine );
 			if( !matcher.matches() ){
 				out.write( tmpLine );
 				out.newLine();
-				lineCount++;
 			}else{
 				processFile( getBufferedReader( matcher.group( 1 ), context), out, context );
-				//System.out.println( "Including file: " + matcher.group( 1 ) );
 			}
 			tmpLine = in.readLine();
 		}
@@ -57,10 +50,8 @@ public class App{
 			String hashedFileName = MD5( fileName );
 			File remoteCacheFile = new File( cacheDirectoryName + File.separator + hashedFileName );
 			if( remoteCacheFile.exists() ){
-				//System.out.println( "Cached file exists for " + fileName );
 				return new BufferedReader( new FileReader( remoteCacheFile ) );
 			}else{
-				//System.out.println( "No cached file exists for " + fileName );
 				URL input = new URL( fileName );
 				BufferedReader remoteReader = new BufferedReader( new InputStreamReader( input.openStream() ) );
 				BufferedWriter cacheWriter = new BufferedWriter(
