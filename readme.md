@@ -14,7 +14,7 @@ Examples:
 `#include "classes/MyClass.js"`
 
 ### Caching
-QPP will cache remote files for faster compilation, so you can clear the cache by deleting .qpp-remote-cache. At some point, you'll be able to pass in a commend-line flag to bypass the cache, but for now, you'll have to delete the folder manually.
+QPP will cache remote files for faster processing, so you can clear the cache by deleting .qpp-remote-cache. At some point, you'll be able to pass in a commend-line flag to bypass the cache, but for now, you'll have to delete the folder manually.
 
 ## This doesn't do much. What's the deal?
 
