@@ -1,9 +1,5 @@
-
 .DS_Store
-
 .idea
-
 *.iml
 .qpp-remote-cache
-
 tmp
