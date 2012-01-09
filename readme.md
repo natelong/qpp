@@ -19,8 +19,9 @@ QPP will cache remote files for faster compilation, so you can clear the cache b
 ## This doesn't do much. What's the deal?
 
 It's not done yet :) Here's a to-do list:
-1. Add a flag to bypass the cache
-2. Build out a better command-line interface (help text, better error messaging, etc.)
-3. Add #IFDEF statements for conditional compilation.
-4. ???
-5. Profit.
+
+1.  Add a flag to bypass the cache
+2.  Build out a better command-line interface (help text, better error messaging, etc.)
+3.  Add #IFDEF statements for conditional compilation.
+4.  ???
+5.  Profit.
