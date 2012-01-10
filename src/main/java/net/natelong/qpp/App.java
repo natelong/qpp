@@ -2,6 +2,7 @@ package net.natelong.qpp;
 
 import java.io.*;
 import java.security.MessageDigest;
+import java.util.HashSet;
 import java.util.regex.*;
 import java.net.URL;
 
@@ -9,6 +10,8 @@ public class App{
 
 	public static Pattern includePattern = Pattern.compile( "^#include \"(.+)\"$" );
 	public static String cacheDirectoryName = ".qpp-remote-cache";
+	public static HashSet<String> includeNames = new HashSet<String>();
+	public static String context;
 	
 	public static void main( String[] args ) throws Throwable{
 		long startTime = System.nanoTime();
@@ -20,32 +23,34 @@ public class App{
 		String inputFileName = args[ args.length - 2 ];
 		String outputFileName = args[ args.length - 1 ];
 
+		includeNames.add( inputFileName );
 		new File( cacheDirectoryName ).mkdir();
 
 		BufferedWriter out = new BufferedWriter( new FileWriter( outputFileName ) );
-		String context = inputFileName.substring( 0, inputFileName.lastIndexOf( File.separator ) + 1 );
-		processFile( getBufferedReader( inputFileName, "" ), out, context );
+		context = inputFileName.substring( 0, inputFileName.lastIndexOf( File.separator ) + 1 );
+		processFile( getBufferedReader( inputFileName ), out );
 
 		out.close();
 		System.out.println( "Elapsed time: " + ( ( System.nanoTime() - startTime ) / 1000000.0f ) + " ms." );
 	}
 
-	public static void processFile( BufferedReader in, BufferedWriter out, String context ) throws Throwable{
+	public static void processFile( BufferedReader in, BufferedWriter out ) throws Throwable{
 		String tmpLine = in.readLine();
 		while( tmpLine != null ){
 			Matcher matcher = includePattern.matcher( tmpLine );
-			if( !matcher.matches() ){
+			if( !matcher.matches() || includeNames.contains( matcher.group( 1 ) ) ){
 				out.write( tmpLine );
 				out.newLine();
 			}else{
-				processFile( getBufferedReader( matcher.group( 1 ), context), out, context );
+				processFile( getBufferedReader( matcher.group( 1 ) ), out );
 			}
 			tmpLine = in.readLine();
 		}
 		in.close();
 	}
 
-	public static BufferedReader getBufferedReader( String fileName, String context ) throws Throwable{
+	public static BufferedReader getBufferedReader( String fileName ) throws Throwable{
+		includeNames.add( fileName );
 		if( fileName.startsWith( "http://" ) || fileName.startsWith( "https://" )  ){
 			String hashedFileName = MD5( fileName );
 			File remoteCacheFile = new File( cacheDirectoryName + File.separator + hashedFileName );
@@ -68,7 +73,11 @@ public class App{
 				return new BufferedReader( new FileReader( cacheDirectoryName + File.separator + hashedFileName ) );
 			}
 		}else{
-			return new BufferedReader( new FileReader( context + fileName ) );
+			if( fileName.startsWith( context ) ){
+				return new BufferedReader( new FileReader( fileName ) );
+			}else{
+				return new BufferedReader( new FileReader( context + fileName ) );
+			}
 		}
 	}
 	public static String MD5( String in ) throws Throwable{
