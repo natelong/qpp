@@ -3,7 +3,7 @@
 	<groupId>net.natelong.qpp</groupId>
 	<artifactId>qpp</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>QPP</name>
 	<url>http://github.com/natelong/qpp</url>
 	<build>
