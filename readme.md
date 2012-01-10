@@ -16,12 +16,18 @@ Examples:
 ### Caching
 QPP will cache remote files for faster processing, so you can clear the cache by deleting .qpp-remote-cache. At some point, you'll be able to pass in a commend-line flag to bypass the cache, but for now, you'll have to delete the folder manually.
 
+## Anything else I should know about?
+Yep. Here's a short list:
+
+1. The context path for file includes is relative to the input file. There is probably a better way to do this (predictable in regards to the filesystem).
+2. Since you're processing into a single file, the app assumes that you only want to include each file once. This way, you don't end up with a bunch of repeated code.
+
 ## This doesn't do much. What's the deal?
 
 It's not done yet :) Here's a to-do list:
 
-1.  Add a flag to bypass the cache
-2.  Build out a better command-line interface (help text, better error messaging, etc.)
-3.  Add #IFDEF statements for conditional compilation.
-4.  ???
-5.  Profit.
+1. Add a flag to bypass the cache
+2. Build out a better command-line interface (help text, better error messaging, etc.)
+3. Add #IFDEF statements for conditional compilation.
+4. ???
+5. Profit.
