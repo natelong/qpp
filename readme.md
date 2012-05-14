@@ -13,6 +13,8 @@ Examples:
 `#include "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"`  
 `#include "classes/MyClass.js"`
 
+`java -jar qpp-1.0.jar inputfilename.js outputfilename.js`
+
 ### Caching
 QPP will cache remote files for faster processing, so you can clear the cache by deleting .qpp-remote-cache. At some point, you'll be able to pass in a commend-line flag to bypass the cache, but for now, you'll have to delete the folder manually.
 
