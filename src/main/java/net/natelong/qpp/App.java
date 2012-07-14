@@ -8,10 +8,10 @@ import java.net.URL;
 
 public class App{
 
-	public static Pattern includePattern = Pattern.compile( "^(?://)?#include \"(.+)\"$" );
+	public static Pattern includePattern = Pattern.compile( "^(?://)?(?:#include|@import) \"(.+)\"(?:;)?$" );
 	public static String cacheDirectoryName = ".qpp-remote-cache";
 	public static HashSet<String> includeNames = new HashSet<String>();
-	public static String context;
+	public static String mainContext;
 
 	public static void main( String[] args ) throws Throwable{
 		long startTime = System.nanoTime();
@@ -27,23 +27,30 @@ public class App{
 		new File( cacheDirectoryName ).mkdir();
 
 		BufferedWriter out = new BufferedWriter( new FileWriter( outputFileName ) );
-		context = inputFileName.substring( 0, inputFileName.lastIndexOf( File.separator ) + 1 );
-		processFile( getBufferedReader( inputFileName ), out );
+		mainContext = contextFromFilename( inputFileName );
+		processFile( getBufferedReader( inputFileName, mainContext ), out, mainContext );
 
 		out.close();
 		System.out.println( "Elapsed time: " + ( ( System.nanoTime() - startTime ) / 1000000.0f ) + " ms." );
 	}
 
-	public static void processFile( BufferedReader in, BufferedWriter out ) throws Throwable{
+	public static void processFile( BufferedReader in, BufferedWriter out, String context ) throws Throwable{
 		String tmpLine = in.readLine();
 		while( tmpLine != null ){
+			// check to see if the line matches the import directive
 			Matcher matcher = includePattern.matcher( tmpLine );
+			// if it doesn't match, just output the line, followed by a newline
 			if( !matcher.matches() ){
 				out.write( tmpLine );
 				out.newLine();
+			// if it matches
 			}else{
-				if( !includeNames.contains( matcher.group( 1 ) ) ){
-					processFile( getBufferedReader( matcher.group( 1 ) ), out );
+				String fileName = matcher.group( 1 );
+				// check if it has already been included
+				if( !includeNames.contains( fileName )){
+					// if it hasn't, process it
+					String newContext = contextFromFilename( fileName );
+					processFile( getBufferedReader( fileName, context ), out, context + newContext );
 				}
 			}
 			tmpLine = in.readLine();
@@ -51,7 +58,7 @@ public class App{
 		in.close();
 	}
 
-	public static BufferedReader getBufferedReader( String fileName ) throws Throwable{
+	public static BufferedReader getBufferedReader( String fileName, String context ) throws Throwable{
 		includeNames.add( fileName );
 		if( fileName.startsWith( "http://" ) || fileName.startsWith( "https://" )  ){
 			String hashedFileName = MD5( fileName );
@@ -90,5 +97,9 @@ public class App{
 			sb.append( Integer.toHexString( ( array[i] & 0xFF ) | 0x100 ).substring( 1, 3 ) );
 		}
 		return sb.toString();
+	}
+
+	public static String contextFromFilename( String fileName ){
+		return fileName.substring( 0, fileName.lastIndexOf( File.separator ) + 1 );
 	}
 }
