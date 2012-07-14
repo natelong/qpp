@@ -38,11 +38,13 @@ public class App{
 		String tmpLine = in.readLine();
 		while( tmpLine != null ){
 			Matcher matcher = includePattern.matcher( tmpLine );
-			if( !matcher.matches() || includeNames.contains( matcher.group( 1 ) ) ){
+			if( !matcher.matches() ){
 				out.write( tmpLine );
 				out.newLine();
 			}else{
-				processFile( getBufferedReader( matcher.group( 1 ) ), out );
+				if( !includeNames.contains( matcher.group( 1 ) ) ){
+					processFile( getBufferedReader( matcher.group( 1 ) ), out );
+				}
 			}
 			tmpLine = in.readLine();
 		}
