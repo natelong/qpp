@@ -22,8 +22,7 @@ QPP will cache remote files for faster processing, so you can clear the cache by
 ## Anything else I should know about?
 Yep. Here's a short list:
 
-1. The context path for file includes is relative to the input file. There is probably a better way to do this (predictable in regards to the filesystem).
-2. Since you're processing into a single file, the app assumes that you only want to include each file once. This way, you don't end up with a bunch of repeated code.
+1. Since you're processing into a single file, the app assumes that you only want to include each file once. This way, you don't end up with a bunch of repeated code.
 
 ## This doesn't do much. What's the deal?
 
