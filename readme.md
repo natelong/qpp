@@ -9,9 +9,10 @@ In a nutshell, QPP allows you to use "#include" directives in any text file to a
 ### #include "filename"
 This statement allows you to add the contents from one file into another file. Just specify the filename in quotes, and QPP will go fetch that content and plop it into your file. You can even use URLs!
 
-Examples:  
-`#include "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"`  
+Examples:
+`#include "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"`
 `#include "classes/MyClass.js"`
+`//#include "classes/MyClass.js"`
 
 `java -jar qpp-1.0.jar inputfilename.js outputfilename.js`
 

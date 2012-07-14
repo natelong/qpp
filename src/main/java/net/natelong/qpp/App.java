@@ -8,11 +8,11 @@ import java.net.URL;
 
 public class App{
 
-	public static Pattern includePattern = Pattern.compile( "^#include \"(.+)\"$" );
+	public static Pattern includePattern = Pattern.compile( "^(?://)?#include \"(.+)\"$" );
 	public static String cacheDirectoryName = ".qpp-remote-cache";
 	public static HashSet<String> includeNames = new HashSet<String>();
 	public static String context;
-	
+
 	public static void main( String[] args ) throws Throwable{
 		long startTime = System.nanoTime();
 
